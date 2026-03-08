@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import DashboardPanel from "./DashboardPanel";
 import Auth from "./Auth";
@@ -107,8 +107,8 @@ function App() {
 
   // Derived state for current chat
   const currentChat = currentChatId ? chats[currentChatId] : null;
-  const messages = currentChat ? currentChat.messages : [];
-  const chatHistory = Object.values(chats).sort((a, b) => b.timestamp - a.timestamp);
+  const messages = useMemo(() => currentChat ? currentChat.messages : [], [currentChat]);
+  const chatHistory = useMemo(() => Object.values(chats).sort((a, b) => b.timestamp - a.timestamp), [chats]);
 
   // Load default CSV on mount once user is logged in
   useEffect(() => {
